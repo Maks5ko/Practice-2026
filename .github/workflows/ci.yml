@@ -6,6 +6,7 @@ on:
       - 'task*'
   pull_request:
     branches:
+      - main
       - 'task*'
 
 jobs:
