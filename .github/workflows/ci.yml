@@ -3,11 +3,11 @@ name: .NET CI
 on:
   push:
     branches:
-      - 'task*'
+      - main
+      - 'task*'                
   pull_request:
     branches:
       - main
-      - 'task*'
 
 jobs:
   build-and-test:
