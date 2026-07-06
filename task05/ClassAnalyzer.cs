@@ -9,7 +9,7 @@ namespace task05
         private Type _type;
         public ClassAnalyzer(Type type)
         {
-            _type = type;
+            _type = type ?? throw new ArgumentNullException(nameof(type));
         }
         public IEnumerable<string> GetPublicMethods()
         {
@@ -39,7 +39,7 @@ namespace task05
         }
         public bool HasAttribute<T>() where T : Attribute
         {
-            return _type.GetCustomAttributes(typeof(T), true).Any();
+            return _type.IsDefined(typeof(T), true);
         }
     }
 }
