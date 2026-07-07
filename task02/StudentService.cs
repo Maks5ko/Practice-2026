@@ -36,11 +36,9 @@ namespace task02
                                  faculty = g.Key,
                                  AvgGrade = g.Average(s => s.Grades.Average())
                              };
-            if (facultyAvg.Count() == 0) return null;
-
             return (from f in facultyAvg
                     orderby f.AvgGrade descending
-                    select f.faculty).First();
+                    select f.faculty).FirstOrDefault();
         }
     }
 }
