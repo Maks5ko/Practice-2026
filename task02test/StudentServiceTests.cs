@@ -62,8 +62,13 @@ namespace task02tests
             var result = _service.GetStudentsOrderedByName().ToList();
             var expectedNames = _testStudents.OrderBy(s => s.Name).Select(s => s.Name).ToList();
             Assert.Equal(expectedNames, result.Select(s => s.Name).ToList());
-            Assert.Equal("Анна", result.First().Name);
-            Assert.Equal("Петр", result.Last().Name);
+            var firstStudent = result.FirstOrDefault();
+            Assert.NotNull(firstStudent);
+            Assert.Equal("Анна", firstStudent.Name);
+
+            var lastStudent = result.LastOrDefault();
+            Assert.NotNull(lastStudent);
+            Assert.Equal("Петр", lastStudent.Name);
         }
         [Fact]
         public void GetStudentsOrderedByName_ReturnsEmpty()
