@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="CommandLib/CommandLib.csproj" />
+  <Project Path="FileSystemCommands/FileSystemCommands.csproj" />
+  <Project Path="MetaDataViewer/MetaDataViewer.csproj" Id="58e1a168-83ef-465b-86e0-3ac543eb9a61" />
+  <Project Path="task09tests/task09tests.csproj" Id="eb841741-a31f-40e0-a6ea-5848604839c6" />
+</Solution>
