@@ -1,29 +1,31 @@
 ﻿using CommandLib;
-namespace FileSystemCommands;
-
-public class FindFilesCommand : ICommand
+namespace FileSystemCommands
 {
-    private readonly string _directoryPath;
-    private readonly string _pattern;
-
-    public FindFilesCommand(string directoryPath, string pattern)
+    [DisplayName("Команда поиска файлов по маске")]
+    [Version(1, 0)]
+    public class FindFilesCommand : ICommand
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
-        ArgumentException.ThrowIfNullOrWhiteSpace(pattern);
-        if (!Directory.Exists(directoryPath))
-            throw new DirectoryNotFoundException($"Каталог не найден: {directoryPath}");
+        private readonly string _directoryPath;
+        private readonly string _pattern;
 
-        _directoryPath = directoryPath;
-        _pattern = pattern;
-    }
-
-    public void Execute()
-    {
-        var files = Directory.GetFiles(_directoryPath, _pattern, SearchOption.AllDirectories);
-        Console.WriteLine($"Найдено файлов по маске '{_pattern}' в '{_directoryPath}': {files.Length}");
-        foreach (var file in files)
+        public FindFilesCommand(string directoryPath, string pattern)
         {
-            Console.WriteLine($"  - {file}");
+            ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
+            ArgumentException.ThrowIfNullOrWhiteSpace(pattern);
+            if (!Directory.Exists(directoryPath)) throw new DirectoryNotFoundException($"Каталог не найден: {directoryPath}");
+
+            _directoryPath = directoryPath;
+            _pattern = pattern;
+        }
+
+        public void Execute()
+        {
+            var files = Directory.GetFiles(_directoryPath, _pattern, SearchOption.AllDirectories);
+            Console.WriteLine($"Найдено файлов по маске '{_pattern}' в '{_directoryPath}': {files.Length}");
+            foreach (var file in files)
+            {
+                Console.WriteLine($"  - {file}");
+            }
         }
     }
 }

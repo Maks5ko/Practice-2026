@@ -1,6 +1,6 @@
 <Solution>
   <Project Path="CommandLib/CommandLib.csproj" />
-  <Project Path="CommandRunner/CommandRunner.csproj" />
   <Project Path="FileSystemCommands/FileSystemCommands.csproj" />
-  <Project Path="task08tests/task08tests.csproj" Id="f1e593f9-9573-45f9-bd9a-3f0d43b8136f" />
+  <Project Path="MetaDataViewer/MetaDataViewer.csproj" Id="58e1a168-83ef-465b-86e0-3ac543eb9a61" />
+  <Project Path="task09tests/task09tests.csproj" Id="eb841741-a31f-40e0-a6ea-5848604839c6" />
 </Solution>

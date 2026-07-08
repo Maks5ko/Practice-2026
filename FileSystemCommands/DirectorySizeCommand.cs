@@ -1,39 +1,42 @@
 ﻿using CommandLib;
-namespace FileSystemCommands;
-
-public class DirectorySizeCommand : ICommand
+namespace FileSystemCommands
 {
-    private readonly string _directoryPath;
 
-    public DirectorySizeCommand(string directoryPath)
+    [DisplayName("Команда вычисления размера директории")]
+    [Version(1, 0)]
+    public class DirectorySizeCommand : ICommand
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
-        if (!Directory.Exists(directoryPath))
-            throw new DirectoryNotFoundException($"Каталог не найден: {directoryPath}");
+        private readonly string _directoryPath;
 
-        _directoryPath = directoryPath;
-    }
-
-    public void Execute()
-    {
-        var size = CalculateDirectorySize(new DirectoryInfo(_directoryPath));
-        Console.WriteLine($"Размер каталога '{_directoryPath}': {size} байт");
-    }
-
-    private static long CalculateDirectorySize(DirectoryInfo directory)
-    {
-        long size = 0;
-
-        foreach (var file in directory.GetFiles())
+        public DirectorySizeCommand(string directoryPath)
         {
-            size += file.Length;
+            ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
+            if (!Directory.Exists(directoryPath)) throw new DirectoryNotFoundException($"Каталог не найден: {directoryPath}");
+
+            _directoryPath = directoryPath;
         }
 
-        foreach (var subDir in directory.GetDirectories())
+        public void Execute()
         {
-            size += CalculateDirectorySize(subDir);
+            var size = CalculateDirectorySize(new DirectoryInfo(_directoryPath));
+            Console.WriteLine($"Размер каталога '{_directoryPath}': {size} байт");
         }
 
-        return size;
+        private static long CalculateDirectorySize(DirectoryInfo directory)
+        {
+            long size = 0;
+
+            foreach (var file in directory.GetFiles())
+            {
+                size += file.Length;
+            }
+
+            foreach (var subDir in directory.GetDirectories())
+            {
+                size += CalculateDirectorySize(subDir);
+            }
+
+            return size;
+        }
     }
 }
