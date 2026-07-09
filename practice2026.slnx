@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="A_Plugin/A_Plugin.csproj" Id="0d2c9c62-ccce-4c61-a6c7-5111462ab125" />
+  <Project Path="B_Plugin/B_Plugin.csproj" Id="ea2147a4-5143-4f90-9b5d-fa6be830bace" />
+  <Project Path="C_Plugin/C_Plugin.csproj" Id="39d2063e-a7ef-417f-9c99-872bb1818447" />
+  <Project Path="PluginLib/PluginLib.csproj" Id="b0d06acc-4542-4b02-9300-1c27b6264a55" />
+  <Project Path="PluginLoader/PluginLoader.csproj" Id="3810c7fe-ba92-41a3-8cf9-5d2c0e68590a" />
+  <Project Path="PluginRunner/PluginRunner.csproj" Id="5c690cfa-94f9-46b5-bcd8-6940b77e7491" />
+  <Project Path="task10tests/task10tests.csproj" Id="b61fe800-37c7-47c9-86da-c07eabf6747f" />
+</Solution>
