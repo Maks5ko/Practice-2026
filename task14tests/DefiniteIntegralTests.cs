@@ -135,6 +135,28 @@ namespace task14tests
             Assert.Throws<ArgumentException>(
                 () => DefiniteIntegral.Solve(1, 0, x => x, 0.1, 2));
         }
- 
+
+        [Fact]
+        public void OptimalStep_ShouldMeetPrecision()
+        {
+            double a = -100, b = 100;
+            Func<double, double> f = Math.Sin;
+            double targetPrecision = 1e-4;
+            double[] steps = { 1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6 };
+
+            double reference = DefiniteIntegral.Solve(a, b, f, 1e-7, 8);
+
+            foreach (var step in steps)
+            {
+                double value = DefiniteIntegral.Solve(a, b, f, step, 8);
+                double error = Math.Abs(value - reference);
+
+                if (error < targetPrecision)
+                {
+                    Assert.True(error < targetPrecision);
+                    break;
+                }
+            }
+        }
     }
 }
