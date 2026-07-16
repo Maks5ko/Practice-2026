@@ -1,12 +1,14 @@
 ﻿using System.Collections.Concurrent;
 using System.Threading;
-
-namespace task17
+using task17;
+using task19;
+namespace task18
 {
     public class ServerThread
     {
         private readonly Thread _thread;
         private readonly BlockingCollection<ICommand> _commandQueue;
+        private readonly IScheduler _scheduler;
         private volatile bool _isHardStopRequested;
         private volatile bool _isSoftStopRequested;
         private Exception _lastException;
@@ -17,8 +19,9 @@ namespace task17
         public bool IsSoftStopRequested => _isSoftStopRequested;
         public Exception LastException => _lastException;
 
-        public ServerThread()
+        public ServerThread(IScheduler scheduler)
         {
+            _scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             _commandQueue = new BlockingCollection<ICommand>(new ConcurrentQueue<ICommand>());
             _thread = new Thread(ProcessCommands);
             _thread.Start();
@@ -45,32 +48,35 @@ namespace task17
         {
             try
             {
-                foreach (var command in _commandQueue.GetConsumingEnumerable())
+                while (!_isHardStopRequested)
                 {
-                    if (_isHardStopRequested)
-                        break;
-
-                    try
+                    if (_scheduler.HasCommand())
                     {
-                        command.Execute();
-
-                        if (command is HardStopCommand)
+                        var cmd = _scheduler.Select();
+                        if (cmd != null)
                         {
-                            _isHardStopRequested = true;
-                            break;
+                            try
+                            {
+                                cmd.Execute();
+                                if (cmd is HardStopCommand)
+                                {
+                                    _isHardStopRequested = true;
+                                    break;
+                                }
+                                else if (cmd is SoftStopCommand) _isSoftStopRequested = true;    
+                            }
+                            catch (Exception ex)
+                            {
+                                _lastException = ex;
+                                Console.WriteLine($"Исключение в команде: {ex.Message}");
+                            }
                         }
-                        else if (command is SoftStopCommand)
-                        {
-                            _isSoftStopRequested = true;
-                        }
+                        continue;
                     }
-                    catch (Exception ex)
-                    {
-                        _lastException = ex;
-                        Console.WriteLine($"Исключение в команде: {ex.Message}");
-                    }
-
-                    if (_isSoftStopRequested && _commandQueue.Count == 0) break;
+                    if (_commandQueue.TryTake(out var newCommand, 10)) _scheduler.Add(newCommand);
+                    else Thread.Sleep(1);
+                    
+                    if (_isSoftStopRequested && _commandQueue.Count == 0 && !_scheduler.HasCommand()) break;
                 }
             }
             catch (OperationCanceledException) { }

@@ -1,25 +1,25 @@
-﻿using ScottPlot;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using task18;
+using ScottPlot;
 
 namespace task18research
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             const int commandCount = 50;
             const int totalWorkPerCommand = 2000;
             int[] quantumSizes = { 1, 2, 5, 10, 20, 50, 100, 150, 200 };
-            const int repeats = 10;
+            const int repeats = 5;
 
             var results = new List<ExperimentResult>();
 
-            Console.WriteLine("Исследование влияния кванта на производительность планировщика");
+            Console.WriteLine("Исследование влияния кванта на производительность планировщика (задание 18)");
             Console.WriteLine($"Команд: {commandCount}, работа на команду: {totalWorkPerCommand}\n");
 
             foreach (int quantum in quantumSizes)
@@ -57,16 +57,14 @@ namespace task18research
             SaveResults(results);
             PlotResults(results);
 
-            Console.WriteLine("\nГрафик сохранён как plot.png, данные в results.csv");
+            Console.WriteLine("\nГрафик сохранён как plot.png, данные в results.txt");
         }
 
         static void SaveResults(List<ExperimentResult> results)
         {
-            using (var writer = new StreamWriter("results.csv"))
-            {
-                writer.WriteLine("Quantum;TimeMs");
-                foreach (var r in results) writer.WriteLine($"{r.Quantum};{r.TimeMs.ToString(CultureInfo.InvariantCulture)}");
-            }
+            using var writer = new StreamWriter("results.txt");
+            writer.WriteLine("Quantum: TimeMs");
+            foreach (var r in results) writer.WriteLine($"{r.Quantum};{r.TimeMs.ToString(CultureInfo.InvariantCulture)}");
         }
 
         static void PlotResults(List<ExperimentResult> results)
@@ -79,7 +77,7 @@ namespace task18research
             scatter.LineWidth = 2;
             scatter.MarkerSize = 10;
 
-            plt.Title("Зависимость времени выполнения от размера кванта");
+            plt.Title("Зависимость времени выполнения от размера кванта (задание 18)");
             plt.XLabel("Размер кванта (единиц работы)");
             plt.YLabel("Общее время выполнения, мс");
 
