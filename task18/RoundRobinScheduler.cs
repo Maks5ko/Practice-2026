@@ -1,42 +1,22 @@
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Concurrent;
 
-namespace task18
+namespace task18;
+
+public class RoundRobinScheduler : IScheduler
 {
-    public class RoundRobinScheduler : IScheduler
+    private readonly ConcurrentQueue<ICommand> _queue = new();
+
+    public bool HasCommand() => !_queue.IsEmpty;
+
+    public ICommand Select()
     {
-        private readonly List<ICommand> _commands = new List<ICommand>();
-        private int _currentIndex = 0;
-        private readonly object _lock = new object();
+        if (_queue.TryDequeue(out var command)) return command;
+        throw new InvalidOperationException("No commands available in scheduler");
+    }
 
-        public void Add(ICommand cmd)
-        {
-            if (cmd == null) throw new System.ArgumentNullException(nameof(cmd));
-            lock (_lock)
-            {
-                _commands.Add(cmd);
-            }
-        }
-        public bool HasCommand()
-        {
-            lock (_lock)
-            {
-                _commands.RemoveAll(c => c.IsCompleted);
-                return _commands.Count > 0;
-            }
-        }
-        public ICommand Select()
-        {
-            lock (_lock)
-            {
-                _commands.RemoveAll(c => c.IsCompleted);
-                if (_commands.Count == 0) return null;
-                if (_currentIndex >= _commands.Count) _currentIndex = 0;
-
-                var selected = _commands[_currentIndex];
-                _currentIndex = (_currentIndex + 1) % _commands.Count;
-                return selected;
-            }
-        }
+    public void Add(ICommand cmd)
+    {
+        ArgumentNullException.ThrowIfNull(cmd);
+        _queue.Enqueue(cmd);
     }
 }

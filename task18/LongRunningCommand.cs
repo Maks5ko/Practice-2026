@@ -1,25 +1,20 @@
-namespace task18
+﻿namespace task18
 {
-    public class LongRunningCommand : ICommand
+    public abstract class LongRunningCommand : ICommand
     {
-        private readonly int _totalSteps;
-        private int _currentStep;
-        private readonly string _name;
-
-        public LongRunningCommand(string name, int steps = 5)
-        {
-            _name = name;
-            _totalSteps = steps;
-            _currentStep = 0;
-        }
-
-        public bool IsCompleted => _currentStep >= _totalSteps;
+        private bool _isCompleted;
+        public bool IsCompleted => _isCompleted;
 
         public void Execute()
         {
-            if (IsCompleted) return;
-            _currentStep++;
-            Console.WriteLine($"Command '{_name}' step {_currentStep}/{_totalSteps} executed.");
+            if (!_isCompleted)
+            {
+                ExecuteStep();
+                _isCompleted = IsWorkCompleted();
+            }
         }
+        protected abstract void ExecuteStep();
+        protected abstract bool IsWorkCompleted();
+
     }
 }
