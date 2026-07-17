@@ -194,5 +194,30 @@ namespace task18tests
             Assert.Same(cmd2, scheduler.Select());
             Assert.Throws<InvalidOperationException>(() => scheduler.Select());
         }
+        [Fact]
+        public void TestCommand_ExecutesCorrectNumberOfSteps()
+        {
+            var cmd = new TestCommand(  );
+            Assert.False(cmd.Executed);
+            cmd.Execute();
+            cmd.Execute();
+            cmd.Execute();
+            Assert.True(cmd.Executed);
+        }
+
+        [Fact]
+        public void ServerThread_HardStop_StopsExecution()
+        {
+            var scheduler = new RoundRobinScheduler();
+            var server = new ServerThread(scheduler);
+
+            for (int i = 0; i < 5; i++) server.Enqueue(new TestCommand());
+
+            Thread.Sleep(100);
+            server.EnqueueHardStop();
+            server.Join();
+
+            Assert.False(server.IsAlive);
+        }
     }
 }

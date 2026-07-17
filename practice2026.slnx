@@ -2,4 +2,6 @@
   <Project Path="task18/task18.csproj" Id="36bd1c3a-0bf4-4c45-8bda-654fc3d01e71" />
   <Project Path="task18research/task18research.csproj" Id="95f5c09b-f3d0-43bb-a67f-372acb6790dd" />
   <Project Path="task18tests/task18tests.csproj" Id="cb2a5005-87b1-46fd-ac28-d3df79ee00bb" />
+  <Project Path="task19/task19.csproj" Id="97c6c7ba-c226-4c5c-a9d3-2944d7023f05" />
+  <Project Path="task19research/task19research.csproj" Id="33cc6c47-8ff6-40b0-ac42-cd401946f97c" />
 </Solution>
